@@ -1,0 +1,19 @@
+<mujoco model="object">
+  <compiler angle="radian"/>
+  <default>
+    <geom friction="0.1 0.3 0.3" solref=".02 1" solimp="0 .8 .01" material="self" density="100.0"/>
+  </default>
+  <asset>
+    <material name="self" rgba=".6 .8 .6 1"/>
+  </asset>
+  <worldbody>
+    <camera name="float_far"  pos="-2.5 0 2" xyaxes="0 -1 0 .5 0 1" mode="trackcom" fovy="70"/>
+
+    <body name="object_body" pos="0 0 0">
+      <geom name="object_geom" type="box" size="0.14 0.14 0.07" density="7."/>
+      <!-- <geom name="object_geom" type="box" size="0.07 0.07 0.05" density="25."/> -->
+      <!-- <site name="object_site" size="0.02" rgba="1 0 0 1"/> -->
+    </body>
+
+  </worldbody>
+</mujoco>

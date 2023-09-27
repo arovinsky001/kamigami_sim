@@ -1,0 +1,94 @@
+<mujoco model="kamigami">
+  <compiler angle="radian"/>
+  <default>
+    <motor ctrlrange="-1.0 1.0" ctrllimited="true" gear="25"/>
+    <geom friction="1 0.5 0.5" solref=".02 1" solimp="0 .8 .01" material="self" density="50.0"/>
+    <joint limited="false"/>
+  </default>
+  <asset>
+    <material name="self" rgba=".8 .6 .4 1"/>
+  </asset>
+  <worldbody>
+    <!-- <camera name="sideon" pos="0 -10 5" fovy="45" mode="targetbody" target="torso" /> -->
+    <camera name="float_far"  pos="-2.5 0 2" xyaxes="0 -1 0 .5 0 1" mode="trackcom" fovy="70"/>
+
+    <body name="torso" pos="0 0 0">
+      <!-- <camera name="floating"  pos="-2 0 1" xyaxes="0 -1 0 .5 0 1" mode="trackcom" fovy="90"/>
+      <camera name="egocentric"  pos=".25 0 .11" xyaxes="0 -1 0 0 0 1" fovy="90" /> -->
+
+      <geom name="torso_geom" type="box" size="0.08 0.04 0.025" density="100.0"/>
+      <!-- <site name="torso_site" size="0.02" rgba="1 0 0 1"/> -->
+
+      <!-- sites that visualize the x-y axis of the ant body, good for debugging -->
+      <!-- <site name="x_pos" type="capsule" pos="0.5 0 0" size=".05 .5" zaxis="1 0 0" rgba="1 0 0 1" group="5"/>
+      <site name="x_neg" type="capsule" pos="-0.5 0 0" size=".05 .5"  zaxis="-1 0 0" rgba="0 0 1 1"  group="5"/>
+      <site name="y_pos" type="capsule" pos="0 0.5 0" size=".05 .5"  zaxis="0 1 0" rgba="1 1 1 1" group="5"/>
+      <site name="y_neg" type="capsule" pos="0 -0.5 0" size=".05 .5"  zaxis="0 -1 0" rgba="0 0 0 1" group="5"/>
+      <site name="port_site" pos=".5 0 0" size="0.5" rgba="1 0 0 1" group="5"/>
+      <site name="starboard_site" pos="-.5 0 0" size="0.5" rgba="0 1 0 1" group="5"/> -->
+
+      <body name="left_front_leg" pos="0.06 0.03 -0.023">
+        <joint name="left_front_joint" axis="0 1 0"/>
+        <geom name="left_front_leg_geom" type="box" pos="0 0.0234923155 -0.00855050358" axisangle="1 0 0 -0.0872664626" size="0.006 0.02 0.003"/>
+      </body>
+
+      <body name="left_center_leg" pos="0 0.03 -0.023">
+        <joint name="left_center_joint" axis="0 1 0" armature="0.05" damping="0.3"/>
+        <geom name="left_center_leg_geom" type="box" pos="0 0.0234923155 0.00855050358" axisangle="1 0 0 0.0872664626" size="0.006 0.02 0.003"/>
+      </body>
+
+      <body name="left_back_leg" pos="-0.06 0.03 -0.023">
+        <joint name="left_back_joint" axis="0 1 0"/>
+        <geom name="left_back_leg_geom" type="box" pos="0 0.0234923155 -0.00855050358" axisangle="1 0 0 -0.0872664626" size="0.006 0.02 0.003"/>
+      </body>
+
+      <body name="right_front_leg" pos="0.06 -0.03 -0.023">
+        <joint name="right_front_joint" axis="0 1 0"/>
+        <geom name="right_front_leg_geom" type="box" pos="0 -0.0234923155 -0.00855050358" axisangle="1 0 0 0.0872664626" size="0.006 0.02 0.003"/>
+      </body>
+
+      <body name="right_center_leg" pos="0 -0.03 -0.023">
+        <joint name="right_center_joint" axis="0 1 0" armature="0.05" damping="0.3"/>
+        <geom name="right_center_leg_geom" type="box" pos="0 -0.0234923155 0.00855050358" axisangle="1 0 0 -0.0872664626" size="0.006 0.02 0.003"/>
+      </body>
+
+      <body name="right_back_leg" pos="-0.06 -0.03 -0.023">
+        <joint name="right_back_joint" axis="0 1 0"/>
+        <geom name="right_back_leg_geom" type="box" pos="0 -0.0234923155 -0.00855050358" axisangle="1 0 0 0.0872664626" size="0.006 0.02 0.003"/>
+      </body>
+
+      <!-- <joint name="robot_roll_constraint" type="hinge" axis="1 0 0" limited="true" range="-0.34906585 0.34906585"/>
+      <joint name="robot_pitch_constraint" type="hinge" axis="0 1 0" limited="true" range="-0.34906585 0.34906585"/> -->
+
+    </body>
+
+  </worldbody>
+
+  <actuator>
+    <motor name="left_center_joint" joint="left_center_joint"/>
+    <motor name="right_center_joint" joint="right_center_joint"/>
+  </actuator>
+
+  <!-- <sensor>
+    <framepos name="torso_pos" objtype="site" objname="torso_site"/>
+    <velocimeter name="torso_vel" site="torso_site"/>
+    <gyro name="torso_gyro" site="torso_site"/>
+    <accelerometer name="torso_accel" site="torso_site"/>
+  </sensor> -->
+
+  <equality>
+    <joint active="true" joint1="left_center_joint" joint2="left_front_joint"/>
+    <joint active="true" joint1="left_center_joint" joint2="left_back_joint"/>
+    <joint active="true" joint1="right_center_joint" joint2="right_front_joint"/>
+    <joint active="true" joint1="right_center_joint" joint2="right_back_joint"/>
+  </equality>
+
+  <contact>
+    <exclude body1="torso" body2="left_front_leg"/>
+    <exclude body1="torso" body2="left_center_leg"/>
+    <exclude body1="torso" body2="left_back_leg"/>
+    <exclude body1="torso" body2="right_front_leg"/>
+    <exclude body1="torso" body2="right_center_leg"/>
+    <exclude body1="torso" body2="right_back_leg"/>
+  </contact>
+</mujoco>
